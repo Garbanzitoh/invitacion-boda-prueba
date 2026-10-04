@@ -1,4 +1,4 @@
-const BACKEND_URL = localStorage.getItem('bodaTestBackendUrl') || '';
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyZb3KtsdY89aIyi2NBOX4Lf1NDq2BIw3CQQwgvZ3IvO47b-sDUVF-l7Wi3sFZQpDyi/exec';
 const form = document.getElementById('testForm');
 const stateBox = document.getElementById('backendState');
 const submitBtn = document.getElementById('submitBtn');
