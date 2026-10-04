@@ -3,65 +3,295 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#3f4d32">
-  <title>Prueba invitación · Carlos & Victoria</title>
+  <meta name="format-detection" content="telephone=no">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Parisienne&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600&family=Parisienne&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="page">
-    <section class="card">
-      <p class="eyebrow">PRUEBA WEB GRATIS</p>
-      <h1>Carlos <span>&</span> Victoria</h1>
-      <p class="lead">Esta página ya está alojada fuera de Google Apps Script. La prueba solo comprobará que una confirmación llega al Sheet sin mostrar la barra de Google.</p>
+  <div id="petalsContainer" class="petals-container" aria-hidden="true"></div>
+  <div id="loading" class="loading-screen" role="status" aria-live="polite">
+    <div class="loader-monogram">C <span>&</span> V</div>
+    <p class="loading-magic">Algo mágico está por comenzar</p>
+    <div class="loading-progress" aria-label="Preparando tu invitación">
+      <span>Preparando tu invitación</span>
+      <strong id="loadingDots" class="loading-dots" aria-hidden="true">.</strong>
+    </div>
+  </div>
 
-      <div id="backendState" class="state waiting">
-        <span class="dot"></span>
-        <span>Esperando conexión con el backend de prueba.</span>
+  <audio id="weddingAudio" preload="auto" loop playsinline webkit-playsinline aria-hidden="true"></audio>
+
+  <button id="musicBtn" class="music-btn hidden" type="button" onclick="toggleMusic()" aria-label="Silenciar música" title="Silenciar música">
+    <svg class="music-speaker" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9.5v5h4l5 4V5.5l-5 4H4Z"></path>
+      <path class="sound-wave wave-one" d="M16 9c1 .9 1 5.1 0 6"></path>
+      <path class="sound-wave wave-two" d="M18.5 6.8c2.6 2.5 2.6 7.9 0 10.4"></path>
+      <path id="musicSlash" class="music-slash hidden" d="M5 5 19 19"></path>
+    </svg>
+  </button>
+
+  <section id="accessScreen" class="access-screen hidden">
+    <div class="access-glow glow-one"></div>
+    <div class="access-glow glow-two"></div>
+    <div id="softFlash" class="soft-flash" aria-hidden="true"></div>
+
+    <div id="accessCard" class="access-card access-announcement">
+      <div class="access-monogram">C <span>&</span> V</div>
+      <p class="eyebrow">NUESTRA BODA</p>
+      <h1><span id="accessGroom">Carlos</span> <em>&</em> <span id="accessBride">Victoria</span></h1>
+      <p id="accessDate" class="access-date">7 de noviembre de 2026</p>
+      <div class="fine-divider"><span></span><i>✦</i><span></span></div>
+      <p class="access-copy">Queremos compartir contigo un día muy especial.</p>
+      <button id="openInvitationBtn" class="open-invitation-btn" type="button" onclick="openInvitation()">
+        <span>Abrir invitación</span>
+        <b aria-hidden="true">⌄</b>
+      </button>
+    </div>
+
+    <div id="envelopeStage" class="envelope-stage hidden" aria-hidden="true">
+      <div class="envelope-aura"></div>
+      <div class="gate-envelope">
+        <div class="inside-card">
+          <span>CON MUCHO CARIÑO</span>
+          <strong id="envelopeNames">Carlos & Victoria</strong>
+          <small id="envelopeDate">07 · 11 · 2026</small>
+        </div>
+
+        <div class="door door-left">
+          <div class="paper-line line-a"></div>
+          <div class="paper-line line-b"></div>
+        </div>
+        <div class="door door-right">
+          <div class="paper-line line-a"></div>
+          <div class="paper-line line-b"></div>
+        </div>
+
+        <div id="envelopeSeal" class="envelope-seal" aria-hidden="true">
+          <span>C</span><i>&amp;</i><span>V</span>
+        </div>
+
       </div>
+    </div>
+  </section>
 
-      <form id="testForm" method="POST" target="backendFrame" autocomplete="on">
-        <input type="hidden" name="source" value="github-pages-test">
-        <input type="hidden" name="tipo" value="INDIVIDUAL">
+  <main id="invitationPage" class="invitation hidden">
+    <section id="hero" class="hero-wedding">
+      <div class="hero-overlay"></div>
+      <div class="hero-frame"></div>
+      <div class="hero-content reveal">
+        <p class="hero-kicker">NOS CASAMOS</p>
+        <h1 class="hero-names"><span id="novio">Carlos</span><em>&</em><span id="novia">Victoria</span></h1>
+        <div class="hero-divider"><span></span><i>✦</i><span></span></div>
+        <p id="fechaHero" class="hero-date">7 de noviembre de 2026</p>
+      </div>
+      <div class="scroll-hint"><span>Desliza</span><b>⌄</b></div>
+    </section>
 
-        <label>
-          Nombre completo
-          <input name="nombre" id="nombre" type="text" placeholder="Ej. Luis Aguilar Uribe" required>
-        </label>
+    <section class="paper-section welcome-section">
+      <div class="section-inner narrow reveal">
+        <p class="eyebrow">NUESTRA BODA</p>
+        <h2 id="bienvenidaTitulo" class="display-title">Un día para recordar</h2>
+        <p id="bienvenidaTexto" class="lead-text">Nos haría mucha ilusión compartir este día contigo.</p>
+      </div>
+    </section>
+<section id="countdownSection" class="countdown-section">
+      <div class="section-inner reveal">
+        <div class="countdown-frame floral-frame">
+          <div class="countdown-spark" aria-hidden="true">✦</div>
+          <p class="eyebrow light">07 · 11 · 2026</p>
+          <h2>Ya falta poco</h2>
+          <p class="countdown-subtitle">Cada día nos acerca un poco más a celebrar juntos.</p>
+          <div class="countdown-grid">
+            <div><strong id="cdDays">00</strong><span>Días</span></div>
+            <div><strong id="cdHours">00</strong><span>Horas</span></div>
+            <div><strong id="cdMinutes">00</strong><span>Min.</span></div>
+            <div><strong id="cdSeconds">00</strong><span>Seg.</span></div>
+          </div>
+          <div class="countdown-bottom-line" aria-hidden="true"><span></span><i>✦</i><span></span></div>
+          <p class="countdown-foot">Cuenta regresiva para nuestro gran día</p>
+        </div>
+      </div>
+    </section>
 
-        <fieldset>
-          <legend>Confirmación</legend>
-          <label class="choice">
-            <input type="radio" name="respuesta" value="ASISTIRE" required>
-            <span>Sí asistiré</span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="respuesta" value="NO_ASISTIRE" required>
-            <span>No podré asistir</span>
-          </label>
-        </fieldset>
+    <section id="coupleSection" class="paper-section couple-section hidden">
+      <div class="section-inner reveal">
+        <p class="eyebrow">NOSOTROS</p>
+        <h2 class="display-title">Nuestra historia continúa</h2>
+        <p class="lead-text">Después de tantos momentos compartidos, queremos celebrar el comienzo de una nueva etapa junto a las personas que forman parte de nuestra historia.</p>
+        <div id="couplePhotos" class="couple-photos">
+          <figure id="couplePhotoOne" class="portrait-frame hidden"><img id="pareja01" alt="Carlos y Victoria"></figure>
+          <figure id="couplePhotoTwo" class="portrait-frame second hidden"><img id="pareja02" alt="Carlos y Victoria"></figure>
+        </div>
+      </div>
+    </section>
 
-        <label>
-          Número de contacto
-          <input name="contacto" id="contacto" type="tel" inputmode="numeric" placeholder="999 999 999" required>
-        </label>
+    <section class="details-section">
+      <div class="section-inner">
+        <div class="section-heading reveal">
+          <p class="eyebrow">DÓNDE CELEBRAREMOS</p>
+          <h2 class="display-title">Ceremonia & Recepción</h2>
+        </div>
+        <div class="event-layout">
+          <article class="event-card reveal floral-frame">
+            <div class="event-image-wrap"><img id="fotoCeremonia" class="event-image hidden" alt="Lugar de la ceremonia"><div class="event-number">01</div></div>
+            <div class="event-copy">
+              <p class="eyebrow">CEREMONIA</p>
+              <h3 id="lugarCeremonia">Iglesia de la Compañía de Jesús</h3>
+              <p id="horaCeremonia" class="event-time"></p>
+              <p id="direccionCeremonia" class="event-address"></p>
+              <a id="mapsCeremonia" class="outline-btn hidden" target="_blank" rel="noopener"><svg class="map-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z"></path><circle cx="12" cy="10" r="2.1"></circle></svg><span>Cómo llegar</span></a>
+            </div>
+          </article>
+          <article class="event-card reverse reveal floral-frame">
+            <div class="event-image-wrap"><img id="fotoRecepcion" class="event-image hidden" alt="Lugar de la recepción"><div class="event-number">02</div></div>
+            <div class="event-copy">
+              <p class="eyebrow">RECEPCIÓN</p>
+              <h3 id="lugarRecepcion">CASA REAL EVENTOS</h3>
+              <p id="horaRecepcion" class="event-time"></p>
+              <p id="direccionRecepcion" class="event-address"></p>
+              <a id="mapsRecepcion" class="outline-btn hidden" target="_blank" rel="noopener"><svg class="map-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z"></path><circle cx="12" cy="10" r="2.1"></circle></svg><span>Cómo llegar</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        <label>
-          Mensaje <small>(opcional)</small>
-          <textarea name="mensaje" rows="3" placeholder="Mensaje de prueba"></textarea>
-        </label>
+    <section id="dressSection" class="paper-section info-pair-section">
+      <div class="section-inner info-pair">
+        <article class="info-card dress-card reveal floral-frame">
+          <div class="dress-icons" aria-hidden="true">
+            <svg class="dress-icon tie-icon" viewBox="0 0 64 64"><path d="M27 8h10l3 9-8 8-8-8 3-9Z"></path><path d="m32 25 8 10-8 21-8-21 8-10Z"></path></svg>
+            <span class="dress-icon-divider"></span>
+            <svg class="dress-icon gown-icon" viewBox="0 0 64 64"><path d="M26 8h12l3 12-5 7 11 27H17l11-27-5-7 3-12Z"></path><path d="M24 20h16"></path></svg>
+          </div>
+          <p class="eyebrow">DRESS CODE</p>
+          <h3 id="dressCode">Elegante</h3>
+          <p id="dressNote">Reservamos el color blanco para la novia.</p>
+        </article>
+        <article id="adultosSection" class="info-card adults-card reveal hidden floral-frame">
+          <div class="line-icon">✦</div>
+          <p class="eyebrow">IMPORTANTE</p>
+          <h3 id="adultosTitulo">Celebración para adultos</h3>
+          <span class="adults-badge">SIN NIÑOS</span>
+          <p id="adultosTexto"></p>
+        </article>
+      </div>
+    </section>
+<section id="giftSection" class="gift-section hidden floral-frame">
+      <div class="gift-decor decor-left"></div><div class="gift-decor decor-right"></div>
+      <div class="section-inner reveal">
+        <div class="gift-icon">♡</div>
+        <p class="eyebrow">REGALO</p>
+        <h2 id="giftTitle" class="display-title">Lo más importante es tu presencia</h2>
+        <p id="giftText" class="lead-text gift-copy"></p>
 
-        <button id="submitBtn" type="submit" disabled>Enviar prueba al Sheet</button>
-      </form>
+        <div id="paymentGrid" class="payment-grid inline-payment-grid">
+          <section id="bank1Card" class="payment-provider hidden">
+            <div class="provider-heading">
+              <div id="bank1LogoFallback" class="provider-logo bank-logo" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3 9h18L12 4 3 9Z"></path><path d="M5 10v7M9 10v7M15 10v7M19 10v7M3 19h18"></path></svg>
+              </div>
+              <img id="bank1Logo" class="provider-logo-img hidden" alt="BCP">
+              <strong id="bank1Name">BCP</strong>
+            </div>
+            <div class="bank-copy-grid">
+              <button id="bank1CcBtn" class="copy-payment hidden" type="button" onclick="copyPayment('bank1Cc')"><span>CUENTA</span><b id="bank1Cc"></b><small>Toca para copiar</small></button>
+            </div>
+          </section>
 
-      <div id="result" class="result hidden"></div>
-      <p class="note">Esta es solo una prueba técnica. Cuando funcione, migramos la invitación completa conservando el diseño.</p>
+          <section id="bank2Card" class="payment-provider hidden">
+            <div class="provider-heading">
+              <div id="bank2LogoFallback" class="provider-logo bank-logo" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3 9h18L12 4 3 9Z"></path><path d="M5 10v7M9 10v7M15 10v7M19 10v7M3 19h18"></path></svg>
+              </div>
+              <img id="bank2Logo" class="provider-logo-img hidden" alt="BBVA">
+              <strong id="bank2Name">BBVA</strong>
+            </div>
+            <div class="bank-copy-grid">
+              <button id="bank2CcBtn" class="copy-payment hidden" type="button" onclick="copyPayment('bank2Cc')"><span>CUENTA</span><b id="bank2Cc"></b><small>Toca para copiar</small></button>
+            </div>
+          </section>
+
+          <section id="yapeCard" class="payment-provider yape-full hidden">
+            <div class="provider-heading">
+              <div id="yapeLogoFallback" class="provider-logo yape-logo">Y</div>
+              <img id="yapeLogo" class="provider-logo-img hidden" alt="Yape">
+              <strong>Yape</strong>
+            </div>
+            <button id="yape1Btn" class="copy-payment yape-copy hidden" type="button" onclick="copyPayment('yape1Number')"><span>NÚMERO</span><b id="yape1Number"></b><small>Toca para copiar</small></button>
+          </section>
+        </div>
+        <p id="copyNotice" class="copy-notice hidden">Copiado ✓</p>
+      </div>
+    </section>
+
+    <section id="galeriaSection" class="paper-section gallery-section hidden">
+      <div class="section-inner reveal">
+        <p class="eyebrow">UN POCO DE NOSOTROS</p>
+        <h2 class="display-title">Momentos que guardamos</h2>
+        <div id="gallery" class="wedding-gallery"></div>
+      </div>
+    </section>
+<section id="rsvpSection" class="rsvp-section">
+      <div class="rsvp-shell reveal floral-frame">
+        <p class="eyebrow">CONFIRMACIÓN</p>
+        <h2>¿Nos acompañas?</h2>
+        <p id="rsvpIntro">Tu respuesta nos ayudará a organizar cada detalle.</p>
+        <p id="rsvpDeadline" class="rsvp-deadline hidden"></p>
+
+        <div id="rsvpStatusCard" class="rsvp-status-card hidden">
+          <span id="rsvpStatusEyebrow">TU RESPUESTA</span>
+          <strong id="rsvpStatusTitle"></strong>
+          <p id="rsvpStatusDetail"></p>
+          <button id="editRsvpBtn" class="outline-btn hidden" type="button" onclick="enableRsvpEdit()">Modificar mi respuesta</button>
+          <div id="rsvpContact" class="rsvp-contact hidden"></div>
+        </div>
+
+        <form id="rsvpForm" class="hidden" onsubmit="sendRsvp(event)">
+          <div class="form-field rsvp-name-field">
+            <label for="rsvpFullName">Nombre completo</label>
+            <input id="rsvpFullName" type="text" autocomplete="name" placeholder="Nombres y apellidos" required>
+          </div>
+          <div class="choice-grid individual-choice-grid">
+            <label class="choice-card"><input type="radio" name="respuesta" value="ASISTIRÉ" required><span class="choice-body"><b>Sí asistiré</b><small>1 persona</small></span></label>
+            <label class="choice-card"><input type="radio" name="respuesta" value="NO ASISTIRÉ" required><span class="choice-body"><b>No podré asistir</b><small>Gracias por avisarnos</small></span></label>
+          </div>
+          <div class="form-field">
+            <label for="contacto">Número de contacto</label>
+            <input id="contacto" type="tel" inputmode="numeric" autocomplete="tel" placeholder="Ej. 999 999 999" required>
+          </div>
+          <div class="form-field">
+            <label for="mensaje">Mensaje para Carlos y Victoria <small>(opcional)</small></label>
+            <textarea id="mensaje" rows="4" placeholder="Déjales unas palabras…"></textarea>
+          </div>
+          <button id="submitBtn" class="filled-btn full-btn" type="submit">Guardar mi respuesta</button>
+        </form>
+        <div id="result" class="rsvp-result hidden"></div>
+      </div>
+    </section>
+
+    <section id="albumSection" class="album-section hidden">
+      <div class="section-inner narrow reveal">
+        <p class="eyebrow light">RECUERDOS</p>
+        <h2>Ayúdanos a guardar cada momento</h2>
+        <p id="fotosTexto"></p>
+        <a id="albumLink" class="light-btn" target="_blank" rel="noopener">Abrir álbum y subir fotos</a>
+      </div>
+    </section>
+
+    <section id="closingSection" class="closing-section">
+      <div class="closing-overlay"></div>
+      <div class="closing-content reveal">
+        <p class="eyebrow light">NOS VEMOS MUY PRONTO</p>
+        <h2><span id="closingGroom">Carlos</span><em>&</em><span id="closingBride">Victoria</span></h2>
+        <p id="despedidaTexto">Gracias por formar parte de nuestra historia.</p>
+        <div class="closing-monogram">C <span>&</span> V</div>
+      </div>
     </section>
   </main>
 
-  <iframe id="backendFrame" name="backendFrame" class="hidden-frame" title="backend"></iframe>
+  <iframe id="backendFrame" name="backendFrame" class="backend-frame" title="backend" aria-hidden="true"></iframe>
   <script src="script.js"></script>
 </body>
 </html>
