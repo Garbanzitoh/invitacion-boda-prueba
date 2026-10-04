@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#3f4d32">
+  <title>Prueba invitación · Carlos & Victoria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Parisienne&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page">
+    <section class="card">
+      <p class="eyebrow">PRUEBA WEB GRATIS</p>
+      <h1>Carlos <span>&</span> Victoria</h1>
+      <p class="lead">Esta página ya está alojada fuera de Google Apps Script. La prueba solo comprobará que una confirmación llega al Sheet sin mostrar la barra de Google.</p>
+
+      <div id="backendState" class="state waiting">
+        <span class="dot"></span>
+        <span>Esperando conexión con el backend de prueba.</span>
+      </div>
+
+      <form id="testForm" method="POST" target="backendFrame" autocomplete="on">
+        <input type="hidden" name="source" value="github-pages-test">
+        <input type="hidden" name="tipo" value="INDIVIDUAL">
+
+        <label>
+          Nombre completo
+          <input name="nombre" id="nombre" type="text" placeholder="Ej. Luis Aguilar Uribe" required>
+        </label>
+
+        <fieldset>
+          <legend>Confirmación</legend>
+          <label class="choice">
+            <input type="radio" name="respuesta" value="ASISTIRE" required>
+            <span>Sí asistiré</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="respuesta" value="NO_ASISTIRE" required>
+            <span>No podré asistir</span>
+          </label>
+        </fieldset>
+
+        <label>
+          Número de contacto
+          <input name="contacto" id="contacto" type="tel" inputmode="numeric" placeholder="999 999 999" required>
+        </label>
+
+        <label>
+          Mensaje <small>(opcional)</small>
+          <textarea name="mensaje" rows="3" placeholder="Mensaje de prueba"></textarea>
+        </label>
+
+        <button id="submitBtn" type="submit" disabled>Enviar prueba al Sheet</button>
+      </form>
+
+      <div id="result" class="result hidden"></div>
+      <p class="note">Esta es solo una prueba técnica. Cuando funcione, migramos la invitación completa conservando el diseño.</p>
+    </section>
+  </main>
+
+  <iframe id="backendFrame" name="backendFrame" class="hidden-frame" title="backend"></iframe>
+  <script src="script.js"></script>
+</body>
+</html>
