@@ -215,7 +215,11 @@ function getNativeWeddingAudio(){
   audio.addEventListener('loadeddata',()=>{state.mediaPrepared=true;if(state.musicShouldStart&&audio.paused)tryAutoplay();},{passive:true});
   audio.addEventListener('playing',()=>{state.musicPlaying=true;state.mediaFailed=false;updateMusicButton();},{passive:true});
   audio.addEventListener('pause',()=>{state.musicPlaying=!audio.paused&&!state.musicMuted;updateMusicButton();},{passive:true});
-  audio.addEventListener('error',()=>{state.mediaFailed=true;updateMusicButton();},{passive:true});
+  audio.addEventListener('error',()=>{
+    state.mediaFailed=true;
+    state.musicPlaying=false;
+    updateMusicButton();
+  },{passive:true});
   return audio;
 }
 function base64Mp3ToBlobUrl(base64,mimeType){
@@ -264,14 +268,26 @@ function loadInvitationFromBackend(){
   });
 }
 
+function normalizeWeddingAudioUrl(value){
+  const s=String(value||'').trim();
+  if(!s)return'';
+  let m=s.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if(!m)m=s.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if(!m)return s;
+  return 'https://drive.usercontent.google.com/download?id='+m[1]+'&export=download&confirm=t';
+}
+
 function configureWeddingAudio(config){
   const audio=getNativeWeddingAudio();
   if(!audio)return;
-  const url=String(config&&config.musica_url||'').trim();
+  const raw=String(config&&config.musica_url||'').trim();
+  const url=normalizeWeddingAudioUrl(raw);
   if(!url)return;
-  if(audio.dataset.sourceUrl===url)return;
+  if(audio.dataset.sourceUrl===url&&audio.src)return;
   audio.dataset.sourceUrl=url;
-  audio.src=url;
+  state.mediaFailed=false;
+  state.mediaPrepared=false;
+  audio.src=url+(url.includes('?')?'&':'?')+'v=20261004';
   audio.preload='auto';
   try{audio.load();}catch(e){}
 }
