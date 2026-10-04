@@ -1,0 +1,29 @@
+:root{--olive:#3f4d32;--olive2:#6d7d57;--cream:#f7f3ea;--ink:#2f352a;--gold:#b79a5e}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#e8ecdf,#f7f3ea);color:var(--ink);font-family:Montserrat,sans-serif;min-height:100vh}
+.page{min-height:100vh;display:grid;place-items:center;padding:24px}
+.card{width:min(720px,100%);background:rgba(255,255,255,.9);border:1px solid rgba(63,77,50,.18);border-radius:28px;padding:34px;box-shadow:0 24px 70px rgba(48,60,39,.14)}
+.eyebrow{letter-spacing:.22em;font-size:12px;color:var(--olive2);font-weight:600;text-align:center}
+h1{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:clamp(48px,9vw,78px);text-align:center;margin:10px 0 12px}
+h1 span{color:var(--gold);font-family:Parisienne,cursive;font-size:.7em}
+.lead{line-height:1.65;text-align:center;color:#5e6658;margin:0 auto 24px;max-width:580px}
+.state{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;margin-bottom:22px;font-size:14px}
+.state.waiting{background:#f4f2e9;color:#69695f}
+.state.ready{background:#edf4e9;color:#3f5d34}
+.state.error{background:#fff0ec;color:#82483d}
+.dot{width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 0 5px rgba(63,77,50,.08)}
+form{display:grid;gap:18px}
+label,legend{font-weight:600;font-size:14px}
+small{font-weight:400;color:#7c8176}
+input,textarea{width:100%;margin-top:8px;border:1px solid #d8dccf;background:#fff;border-radius:14px;padding:14px 15px;font:inherit;color:var(--ink);outline:none}
+input:focus,textarea:focus{border-color:var(--olive2);box-shadow:0 0 0 3px rgba(109,125,87,.12)}
+fieldset{border:0;padding:0;margin:0}
+.choice{display:flex;align-items:center;gap:10px;border:1px solid #d8dccf;border-radius:14px;padding:12px 14px;margin-top:8px;cursor:pointer;background:#fff}
+.choice input{width:auto;margin:0}
+button{border:0;border-radius:999px;padding:15px 20px;background:linear-gradient(135deg,var(--olive2),var(--olive));color:#fff;font-weight:700;cursor:pointer;box-shadow:0 12px 26px rgba(63,77,50,.18)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.result{margin-top:18px;border-radius:14px;padding:14px 16px;background:#edf4e9;color:#3f5d34}
+.hidden{display:none}
+.note{font-size:12px;color:#7d8178;text-align:center;margin-top:20px}
+.hidden-frame{position:absolute;width:1px;height:1px;border:0;opacity:0;pointer-events:none}
+@media(max-width:560px){.card{padding:24px 18px;border-radius:22px}.page{padding:14px}}
